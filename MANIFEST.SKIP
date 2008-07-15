@@ -1,6 +1,8 @@
 \bRCS\b
 \bCVS\b
 \.svn/
+\.git/
+\.gitignore
 ^MANIFEST\.
 ^Makefile$
 ~$
