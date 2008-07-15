@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Queue::Leaky;
 
 {
@@ -16,9 +16,7 @@ use Queue::Leaky;
     ok( $queue->clear );
 }
 
-TODO: {
-    local $TODO = "I don't have written codes yet";
-
+{
     my $max = 3;
     my $queue = Queue::Leaky->new(
         max_items => $max,
@@ -34,4 +32,6 @@ TODO: {
         is( $queue->fetch, $count );
     }
     ok( !$queue->next );
+
+    is( $queue->state_get($queue->queue) , 0 );
 }

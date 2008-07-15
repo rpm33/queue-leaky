@@ -5,6 +5,13 @@ use Queue::Leaky::Types;
 
 our $VERSION = '0.01';
 
+has 'max_items' => (
+    is => 'rw',
+    isa => 'Int',
+    required => 1,
+    default => 0,
+);
+
 {
     my $default = sub {
         my $class = shift;
@@ -20,7 +27,7 @@ our $VERSION = '0.01';
         required => 1,
         coerce   => 1,
         default  => $default->( 'Queue::Leaky::Driver::Simple' ),
-        handles  => [ qw(next fetch insert clear) ],
+        handles  => [ qw(next clear) ],
     );
 
     has 'state' => (
@@ -38,6 +45,35 @@ our $VERSION = '0.01';
 __PACKAGE__->meta->make_immutable;
 
 no Moose;
+
+sub insert {
+    my $self = shift;
+
+    my $key   = $self->queue;
+    my $count = $self->state_incr($key);
+
+    if ($self->max_items && $self->max_items < $count) {
+        $self->state_decr($key);
+        return ();
+    }
+
+    my $rv = $self->queue->insert(@_);
+
+    $self->state_decr($key) unless $rv;
+    return $rv;
+}
+
+sub fetch {
+    my $self = shift;
+
+    my $rv = $self->queue->fetch(@_);
+
+    if ($rv) {
+        my $key = $self->queue;
+        $self->state_decr($key);
+    }
+    return $rv;
+}
 
 1;
 
