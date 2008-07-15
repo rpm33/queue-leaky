@@ -25,17 +25,18 @@ our $VERSION = '0.01';
                 qw(next fetch insert clear)
         },
     );
-}
 
-has 'state' => (
-    is => 'rw',
-    does => 'Queue::Leaky::State',
-    coerce => 1,
-    required => 1,
-    handles => {
-        map { ("state_$_" => $_) } qw(get set remove incr decr)
-    }
-);
+    has 'state' => (
+        is       => 'rw',
+        does     => 'Queue::Leaky::State',
+        required => 1,
+        coerce   => 1,
+        default  => $default->( 'Queue::Leaky::State::Memory' ),
+        handles  => {
+            map { ("state_$_" => $_) } qw(get set remove incr decr)
+        }
+    );
+}
 
 __PACKAGE__->meta->make_immutable;
 
