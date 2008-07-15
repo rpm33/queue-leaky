@@ -5,16 +5,27 @@ use Queue::Leaky::Types;
 
 our $VERSION = '0.01';
 
-has 'queue' => (
-    is       => 'rw',
-    does     => 'Queue::Leaky::Driver',
-    required => 1,
-    coerce   => 1,
-    handles => {
-        map { ( "q_$_" => $_ ) }
-            qw(next fetch insert clear)
-    },
-);
+{
+    my $default = sub {
+        my $class = shift;
+        return sub {
+            Class::MOP::load_class($class);
+            $class->new;
+        };
+    };
+
+    has 'queue' => (
+        is       => 'rw',
+        does     => 'Queue::Leaky::Driver',
+        required => 1,
+        coerce   => 1,
+        default  => $default->( 'Queue::Leaky::Driver::Simple' ),
+        handles  => {
+            map { ( "q_$_" => $_ ) }
+                qw(next fetch insert clear)
+        },
+    );
+}
 
 has 'state' => (
     is => 'rw',
