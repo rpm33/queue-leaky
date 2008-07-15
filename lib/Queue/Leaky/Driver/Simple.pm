@@ -26,8 +26,8 @@ sub next {
 }
 
 sub insert {
-    my( $self, $message ) = @_;
-    $self->base->add($message);
+    my $self = shift;
+    $self->base->add(@_);
     return 1;
 }
 
