@@ -8,6 +8,7 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
+
 __END__
 
 =encoding utf-8
@@ -16,15 +17,16 @@ __END__
 
 =head1 NAME
 
-Queue::Leaky -
+Queue::Leaky - Queues with leaky buckets
 
 =head1 SYNOPSIS
 
   use Queue::Leaky;
+  my $queue = Queue::Leaky->new;
 
 =head1 DESCRIPTION
 
-Queue::Leaky is
+Queue::Leaky is employed as a traffic regulator.
 
 =head1 AUTHOR
 
