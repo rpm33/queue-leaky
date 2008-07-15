@@ -21,7 +21,10 @@ __PACKAGE__->meta->make_immutable;
 
 no Moose;
 
-sub next { }
+sub next {
+    my $self = shift;
+    ! $self->base->empty;
+}
 
 1;
 
