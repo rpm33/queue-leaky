@@ -10,7 +10,6 @@ has 'base' => (
     required => 1,
     handles  => {
         fetch  => 'remove',
-        insert => 'add',
         clear  => 'clear',
     },
 );
@@ -24,6 +23,12 @@ no Moose;
 sub next {
     my $self = shift;
     ! $self->base->empty;
+}
+
+sub insert {
+    my( $self, $message ) = @_;
+    $self->base->add($message);
+    return 1;
 }
 
 1;
