@@ -20,10 +20,7 @@ our $VERSION = '0.01';
         required => 1,
         coerce   => 1,
         default  => $default->( 'Queue::Leaky::Driver::Simple' ),
-        handles  => {
-            map { ( "q_$_" => $_ ) }
-                qw(next fetch insert clear)
-        },
+        handles  => [ qw(next fetch insert clear) ],
     );
 
     has 'state' => (
@@ -41,14 +38,6 @@ our $VERSION = '0.01';
 __PACKAGE__->meta->make_immutable;
 
 no Moose;
-
-sub next { }
-
-sub fetch { }
-
-sub insert { }
-
-sub clear { }
 
 1;
 
