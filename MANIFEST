@@ -10,6 +10,9 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 inc/Test/More.pm
 lib/Queue/Leaky.pm
+lib/Queue/Leaky/Driver.pm
+lib/Queue/Leaky/State.pm
+lib/Queue/Leaky/Types.pm
 Makefile.PL
 MANIFEST			This list of files
 META.yml
