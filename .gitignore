@@ -1,5 +1,6 @@
 Makefile
 *.old
+*.bak
 inc
 META.yml
 blib
