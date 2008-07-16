@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 18;
+use Test::More tests => 24;
 use Queue::Leaky;
 
 {
@@ -33,5 +33,20 @@ use Queue::Leaky;
     }
     ok( !$queue->next );
 
-    is( $queue->state_get($queue->queue) , 0 );
+    is( $queue->state_get($queue->queue), 0 );
+}
+
+{
+    my $max = 3;
+    my $queue = Queue::Leaky->new;
+
+    for my $count (1 .. $max) {
+        ok( $queue->insert($count) );
+    }
+
+    is( $queue->state_get($queue->queue), 3 );
+
+    ok( $queue->clear );
+
+    is( $queue->state_get($queue->queue), 0 );
 }

@@ -39,7 +39,7 @@ has 'key_generator' => (
         required => 1,
         coerce   => 1,
         default  => $default->( 'Queue::Leaky::Driver::Simple' ),
-        handles  => [ qw(next clear) ],
+        handles  => [ qw(next) ],
     );
 
     has 'state' => (
@@ -83,6 +83,18 @@ sub fetch {
     if ($rv) {
         my $key = $self->key_generator->($self, @_);
         $self->state_decr($key);
+    }
+    return $rv;
+}
+
+sub clear {
+    my $self = shift;
+
+    my $rv = $self->queue->clear(@_);
+
+    if ($rv) {
+        my $key = $self->key_generator->($self, @_);
+        $self->state_remove($key);
     }
     return $rv;
 }

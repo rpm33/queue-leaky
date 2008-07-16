@@ -12,7 +12,7 @@ has 'data' => (
 
 no Moose;
 
-sub get { shift->data->{$_[0]} }
+sub get { shift->data->{$_[0]} || 0 }
 sub set { shift->data->{$_[0]} = $_[1] }
 sub remove { delete shift->data->{$_[0]} }
 
