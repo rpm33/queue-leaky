@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 36;
+use Test::More tests => 42;
 use Queue::Leaky;
 
 {
@@ -49,6 +49,35 @@ use Queue::Leaky;
     ok( $queue->clear );
 
     is( $queue->state_get($queue->queue), 0 );
+}
+
+{
+    my $table = "q_incoming";
+    my $queue = Queue::Leaky->new(
+        queue => {
+            module => 'Q4M',
+            connect_info => [
+                $ENV{QLEAKY_Q4M_DSN},
+                $ENV{QLEAKY_Q4M_USERNAME},
+                $ENV{QLEAKY_Q4M_PASSWORD},
+                { RaiseError => 1, AutoCommit => 1 },
+            ],
+        },
+    );
+
+    ok( $queue, "queue ok" );
+    isa_ok( $queue, "Queue::Leaky", "queue class ok" );
+
+    my $message = {
+        destination => "world",
+        message     => "Hello!",
+    };
+
+    ok( $queue->insert($table, $message) );
+    my $rv = $queue->next($table);
+    is( $rv, $table );
+    is( $queue->fetch($rv)->{message}, "Hello!" );
+    ok( $queue->clear($table) );
 }
 
 {
