@@ -16,7 +16,7 @@ my $coerce = sub {
             $module = join('::', $prefix, $module);
         }
         Class::MOP::load_class($module);
-        $module->new(%{$h->{args}});
+        $module->new(%$h);
     };
 };
 
