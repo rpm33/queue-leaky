@@ -94,7 +94,7 @@ sub clear {
 
     if ($rv) {
         my $key = $self->key_generator->($self, @_);
-        $self->state_remove($key);
+        $self->state_remove($key) if $key;
     }
     return $rv;
 }
