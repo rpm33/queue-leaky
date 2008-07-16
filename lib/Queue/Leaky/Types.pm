@@ -22,7 +22,7 @@ my $coerce = sub {
 
 coerce 'Queue::Leaky::Driver'
     => from 'HashRef'
-    => $coerce->('Q4M', 'Queue::Leaky::Driver')
+    => $coerce->('Simple', 'Queue::Leaky::Driver')
 ;
 
 coerce 'Queue::Leaky::State'
