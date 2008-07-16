@@ -12,6 +12,18 @@ has 'max_items' => (
     default => 0,
 );
 
+has 'key_generator' => (
+    is => 'rw',
+    isa => 'CodeRef',
+    required => 1,
+    default => sub {
+        return sub {
+            my $self = shift;
+            $self->queue;
+        };
+    },
+);
+
 {
     my $default = sub {
         my $class = shift;
@@ -49,7 +61,7 @@ no Moose;
 sub insert {
     my $self = shift;
 
-    my $key   = $self->queue;
+    my $key   = $self->key_generator->($self, @_);
     my $count = $self->state_incr($key);
 
     if ($self->max_items && $self->max_items < $count) {
@@ -69,7 +81,7 @@ sub fetch {
     my $rv = $self->queue->fetch(@_);
 
     if ($rv) {
-        my $key = $self->queue;
+        my $key = $self->key_generator->($self, @_);
         $self->state_decr($key);
     }
     return $rv;
