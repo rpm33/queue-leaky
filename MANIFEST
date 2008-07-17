@@ -23,3 +23,4 @@ META.yml
 README
 t/00_compile.t
 t/01_basic.t
+t/02_extended.t
