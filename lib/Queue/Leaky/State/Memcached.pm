@@ -3,7 +3,7 @@ package Queue::Leaky::State::Memcached;
 use Moose;
 use Moose::Util::TypeConstraints;
 
-subtype 'Memcached'
+subtype 'Queue::Leaky::State::Memcached::Instance'
     => as 'Object'
         => where { 
             $_->isa('Cache::Memcached') ||
@@ -12,7 +12,7 @@ subtype 'Memcached'
         }
 ;
 
-coerce 'Memcached'
+coerce 'Queue::Leaky::State::Memcached::Instance'
     => from 'HashRef'
         => via {
             foreach my $module qw(Cache::Memcached::libmemcached Cache::Memcached::Fast Cache::Memcached) {
@@ -26,7 +26,7 @@ coerce 'Memcached'
         
 has 'memcached' => (
     is => 'rw',
-    isa => 'Memcached',
+    isa => 'Queue::Leaky::State::Memcached::Instance',
     coerce => 1,
     required => 1,
     handles => [ qw(get set remove decr) ]
